@@ -1,5 +1,6 @@
 class User < ApplicationRecord
 	attr_accessor :remember_token
+	has_many :entries, dependent: :destroy
 	before_save { self.email = email.downcase }
 	validates :name, presence: true, length: { maximum: 50 }
 	VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
@@ -30,5 +31,8 @@ class User < ApplicationRecord
 	end
 	def forget
 		update_attributes remember_digest: nil
+	end
+	def feed
+		Entry.where("user_id = ?", id)
 	end
 end
