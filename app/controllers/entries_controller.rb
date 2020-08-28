@@ -17,6 +17,12 @@ class EntriesController < ApplicationController
 		flash[:success] = "entry deleted"
 		redirect_to request.referrer || root_url
 	end
+	def show
+		
+		@entry = Entry.find_by(id: params[:id])
+		@entry_comment = @entry.entry_comments.build
+		@entry_comments = @entry.entry_comments.sort_by_created.paginate(page: params[:page])
+	end
 	private
 	def entri_params
 		params.require(:entry).permit(:content,:image)

@@ -1,5 +1,6 @@
 class User < ApplicationRecord
 	attr_accessor :remember_token
+	has_many :entry_comments, dependent: :destroy
 	has_many :entries, dependent: :destroy
 	has_many :active_relationships, class_name: Relationship.name,
 									foreign_key: "follower_id",
@@ -20,6 +21,12 @@ class User < ApplicationRecord
 							uniqueness: true
 	has_secure_password
 	validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
+	
+	def feed
+		part_of_feed = "relationships.follower_id = :id or entries.user_id = :id"
+		Entry.joins(user: :followers).where(part_of_feed, { id: id })
+	end
+
 	class << self
 # Returns the hash digest of the given string.
 		def digest(string)
@@ -43,12 +50,7 @@ class User < ApplicationRecord
 	def forget
 		update_attributes remember_digest: nil
 	end
-	def feed
-		following_ids = "SELECT followed_id FROM relationships
-						WHERE follower_id = :user_id"
-		Entry.where("user_id IN (#{following_ids})
-					OR user_id = :user_id", user_id: id)
-	end
+	
 	# Follows a user.
 	def follow(other_user)
 		following << other_user

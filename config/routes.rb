@@ -15,7 +15,8 @@ Rails.application.routes.draw do
 		end
 	end
 	resources :users
-	resources :entries, only: [:create, :destroy]
+	resources :entries, only: [:show, :create, :destroy]
 	resources :relationships, only: [:create, :destroy]
+	resources :entry_comments
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

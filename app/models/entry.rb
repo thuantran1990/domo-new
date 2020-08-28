@@ -1,5 +1,7 @@
 class Entry < ApplicationRecord
   belongs_to :user
+  has_many :entry_comments, dependent: :destroy
+  accepts_nested_attributes_for :entry_comments, allow_destroy: :true
   has_one_attached :image
   scope :sort_by_created, -> { order(created_at: :desc) }	
   validates :user_id, presence: true
