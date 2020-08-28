@@ -1,0 +1,28 @@
+<li id="@entry-<%= @entry.id %>">
+		<%= link_to gravatar_for(@entry.user, size: 50), @entry.user %>
+		<span class="user"><%= link_to @entry.user.name, @entry.user %></span>
+		<span class="content">
+			<%= @entry.content %>
+			<%= image_tag @entry.display_image if @entry.image.attached? %>
+		</span>
+		<span class="timestamp">
+			Posted <%= time_ago_in_words(@entry.created_at) %> ago.
+			<% if current_user?(@entry.user) %>
+				<%= link_to "delete", @entry, method: :delete,
+				data: { confirm: "You sure?" } %>
+			<% end %>
+		</span>
+	</li>
+	<section class="comment_form_form">
+		<%= render 'shared/comment_form' %>
+	</section>
+
+	<div class="col-md-8">
+		<% if @entry.entry_comments.any? %>
+			<h3>comments (<%= @entry.entry_comments.count %>)</h3>
+			<ol class="entries">
+				<%= render @entry_comments %>
+			</ol>
+		<%= will_paginate @entry_comments %>
+		<% end %>
+	</div>

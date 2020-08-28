@@ -1,0 +1,12 @@
+<li id="@entry-<%= @entry.id %>">
+	<%= link_to gravatar_for(entry_comment.user, size: 50), entry_comment.user %>
+	<span class="user"><%= entry_comment.user.name %></span>
+	<span class="content"><%= entry_comment.content %></span>
+	<span><%= link_to "delete", entry_comment_path(entry_comment), 
+		method: :delete,data: { confirm: "You sure?" } %>	
+	</span>
+	<span><%= link_to "edit", edit_entry_comment_path(entry_comment) %></span>
+	<span class="timestamp">
+		Posted <%= time_ago_in_words(entry_comment.created_at) %> ago.
+	</span>
+</li>
