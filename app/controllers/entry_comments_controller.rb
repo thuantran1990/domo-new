@@ -1,5 +1,7 @@
 class EntryCommentsController < ApplicationController
 	before_action :logged_in_user, only: [:create]
+
+	before_action :correct_user, only: [:edit, :update]
 	def show
 
 	end
@@ -34,4 +36,11 @@ class EntryCommentsController < ApplicationController
 	  def entrycomment_params
 	  	params.require(:entry_comment).permit(:content, :entry_id, :user_id)
 	  end
+
+	  
+	  def correct_user
+		@user = User.find_by(id: params[:id])
+		redirect_to(root_url) unless current_user?(@user)
+ 	 end
+
 end
